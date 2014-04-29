@@ -1,0 +1,21 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	display: flex;
+}
+
+div.container {
+	background-color: #EEE;
+	width: 400px;
+	height: 400px;
+	padding: 3px;
+}
+
+div.container svg {
+	width: 90%;
+	height: 90%;
+}
+

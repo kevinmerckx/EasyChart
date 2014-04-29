@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="main.css">
+		<link rel="stylesheet" href="SimpleChart.css">
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="Series.js" charset="utf-8"></script>
+		<script src="SimpleChart.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="container">
+			<svg>
+				<text x="0" y="50">Yooooo</text>
+			</svg>
+			<script>
+				(function(){
+					MYCHART = new SimpleChart(d3.select("div.container svg"));
+					
+					SERIES1 = MYCHART.addSeries({
+					data: [],
+					legend:"Serie 1"});
+					SERIES2 = MYCHART.addSeries({
+					data: [],
+					legend:"Serie 2",color:"red"});
+					var i = 0;
+					setInterval(function(){
+						// we pick two random numbers between 0 and 100
+						var timestamp = new Date().getTime();
+						SERIES1.data.push({
+							x:i,
+							y:Math.random()*100
+						});
+						SERIES2.data.push({
+							x:i,
+							y:Math.random()*100
+						});
+						MYCHART.update();
+						i++;
+					},3000);
+				})();
+			</script>
+		</div>
+	</body>
+</html>
