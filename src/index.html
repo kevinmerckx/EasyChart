@@ -10,7 +10,6 @@
 	<body>
 		<div class="container">
 			<svg>
-				<text x="0" y="50">Yooooo</text>
 			</svg>
 			<script>
 				(function(){
@@ -27,11 +26,11 @@
 						// we pick two random numbers between 0 and 100
 						var timestamp = new Date().getTime();
 						SERIES1.data.push({
-							x:i,
+							x:timestamp,
 							y:Math.random()*100
 						});
 						SERIES2.data.push({
-							x:i,
+							x:timestamp,
 							y:Math.random()*100
 						});
 						MYCHART.update();
