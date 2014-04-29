@@ -7,10 +7,45 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="stylesheets/SimpleChart.css">
+	  
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="javascripts/Series.js"></script>
+    <script src="javascripts/SimpleChart.js"></script>
+    
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+	  
+	  <script>
+	  
+				(function(){
+					MYCHART = new SimpleChart(d3.select("div.container svg"));
+					
+					SERIES1 = MYCHART.addSeries({
+					data: [],
+					legend:"Serie 1"});
+					SERIES2 = MYCHART.addSeries({
+					data: [],
+					legend:"Serie 2",color:"red"});
+					var i = 0;
+					setInterval(function(){
+						// we pick two random numbers between 0 and 100
+						var timestamp = new Date().getTime();
+						SERIES1.data.push({
+							x:i,
+							y:Math.random()*100
+						});
+						SERIES2.data.push({
+							x:i,
+							y:Math.random()*100
+						});
+						MYCHART.update();
+						i++;
+					},3000);
+				})();
+	  </script>
   </head>
   <body>
     <div class="wrapper">
@@ -28,6 +63,11 @@
         </ul>
       </header>
       <section>
+		  <div class="container">
+			<svg>
+			</svg>
+
+		 </div>
         <h3>
 <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 

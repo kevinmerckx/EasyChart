@@ -1,0 +1,12 @@
+g.series {
+}
+
+g.series path.curve {
+	fill: none;
+	stroke-width: 1px;
+	vector-effect: non-scaling-stroke;
+}
+
+text {
+	vector-effect: non-scaling-stroke;
+}
