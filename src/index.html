@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="main.css">
-		<link rel="stylesheet" href="SimpleChart.css">
+		<link rel="stylesheet" href="EasyChart.css">
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="Series.js" charset="utf-8"></script>
-		<script src="SimpleChart.js" charset="utf-8"></script>
+		<script src="EasyChart.js" charset="utf-8"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -14,7 +14,7 @@
 			</svg>
 			<script>
 				(function(){
-					MYCHART = new SimpleChart(d3.select("div.container svg"));
+					MYCHART = new EasyChart(d3.select("div.container svg"));
 					
 					SERIES1 = MYCHART.addSeries({
 					data: [],

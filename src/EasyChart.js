@@ -1,7 +1,7 @@
 /**
  * svg element with viewBox
  */
-var SimpleChart = function (svg) {
+var EasyChart = function (svg) {
 	this._svg = svg;
 	this._series = [];
 	this._min_x = 0;
@@ -21,14 +21,14 @@ var SimpleChart = function (svg) {
 	// series.color = "green"
 	// returns a Series object:
 	// - update 
-SimpleChart.prototype.addSeries = function(series) {
+EasyChart.prototype.addSeries = function(series) {
 	var seriesObj = new Series(series,this,this._svg.append("g"));
 	this._series.push(seriesObj);
 	this.update();
 	return seriesObj;
 };
 
-SimpleChart.prototype._updateViewbox = function() {
+EasyChart.prototype._updateViewbox = function() {
 	// calculate this._min_x & this._min_y & this._width & this._height
 	var mins_x = [];
 	var maxs_x = [];
@@ -56,7 +56,7 @@ SimpleChart.prototype._updateViewbox = function() {
 	this._height = this._max_y - this._min_y;
 };
 
-SimpleChart.prototype.update = function() {
+EasyChart.prototype.update = function() {
 	var that = this;
 	this._updateViewbox();
 	this._svg.transition().duration(1000).attr("viewBox",this._min_x + " " + this._min_y + " " + this._width + " " + this._height).each(function(){
@@ -65,11 +65,11 @@ SimpleChart.prototype.update = function() {
 	});
 };
 
-SimpleChart.prototype._x = function(x) {
+EasyChart.prototype._x = function(x) {
 	return x;
 };
 
-SimpleChart.prototype._y = function(y) {
+EasyChart.prototype._y = function(y) {
 	return - y  + this._max_y + this._min_y;
 };
 
@@ -93,7 +93,7 @@ var Series = function(series,chart,g) {
 	this._path.classed({"curve":true}).attr("stroke",this.color);
 };
 
-// this method should cause the SimpleChart to draw everything
+// this method should cause the EasyChart to draw everything
 Series.prototype.update = function() {
 	this._path.transition(1000).attr("d",this._line(this.data)).attr("stroke",this.color);
 };
