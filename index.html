@@ -7,12 +7,19 @@
 
 		<link rel="stylesheet" href="stylesheets/styles.css">
 		<link rel="stylesheet" href="stylesheets/pygment_trac.css">
-		<link rel="stylesheet" href="stylesheets/EasyChart.css">
+
+		<link rel="stylesheet/less" type="text/css"  href="stylesheets/EasyChart.less">
 		<link rel="stylesheet" href="stylesheets/main.css">
 
+		<script src="javascripts/dependencies/less.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="javascripts/dependencies/jquery.observable/jquery.observable.js" type="text/javascript"></script>
+
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<script src="javascripts/Series.js"></script>
-		<script src="javascripts/EasyChart.js"></script>
+		<script src="javascripts/Series.js" charset="utf-8"></script>
+		<script src="javascripts/EasyChartView.js" charset="utf-8"></script>
+		<script src="javascripts/EasyChart.js" charset="utf-8"></script>
+
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		<!--[if lt IE 9]>
@@ -38,14 +45,11 @@
 			</header>
 			<section>
 				<div class="container">
-					<svg>
-					</svg>
 					<script>
 
 						(function(){
 							var container = d3.select("div.container");
-							var svg = d3.select("div.container svg");
-							MYCHART = new EasyChart(svg);
+							MYCHART = new EasyChart("div.container");
 
 							SERIES1 = MYCHART.addSeries({
 								data: [],
