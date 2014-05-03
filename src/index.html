@@ -2,18 +2,22 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="main.css">
-		<link rel="stylesheet" href="EasyChart.css">
+		<link rel="stylesheet/less" type="text/css"  href="EasyChart.less">
+		
+		<script src="dependencies/less.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="dependencies/jquery.observable/jquery.observable.js" type="text/javascript"></script>
+
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="Series.js" charset="utf-8"></script>
+		<script src="EasyChartView.js" charset="utf-8"></script>
 		<script src="EasyChart.js" charset="utf-8"></script>
 	</head>
 	<body>
 		<div class="container">
-			<svg>
-			</svg>
 			<script>
 				(function(){
-					MYCHART = new EasyChart(d3.select("div.container svg"));
+					MYCHART = new EasyChart("div.container");
 					
 					SERIES1 = MYCHART.addSeries({
 					data: [],
@@ -21,21 +25,17 @@
 					SERIES2 = MYCHART.addSeries({
 					data: [],
 					legend:"Serie 2",color:"red"});
-					var i = 0;
-					setInterval(function(){
-						// we pick two random numbers between 0 and 100
-						var timestamp = new Date().getTime();
+					for(var i=0;i<30;i++) {
 						SERIES1.data.push({
-							x:timestamp,
+							x:i,
 							y:Math.random()*100
 						});
 						SERIES2.data.push({
-							x:timestamp,
+							x:i,
 							y:Math.random()*100
 						});
+					}
 						MYCHART.update();
-						i++;
-					},3000);
 				})();
 			</script>
 		</div>

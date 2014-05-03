@@ -16,13 +16,16 @@ var Series = function(series,chart,g) {
 	});
 	this._path = this._g.append("path");
 	this._path.classed({"curve":true}).attr("stroke",this.color);
+	this._highlightPoint = this._g.append("circle").attr("r",10).classed({"highlight-pt":true});
 };
 
 // this method should cause the EasyChart to draw everything
 Series.prototype.update = function() {
 	if(this.data.length > 1){
 		this._path.transition().attr("d",this._line(this.data)).attr("stroke",this.color);
-	}		
+	}
+	this._highlightPoint.classed({"invisible":true});
+
 };
 
 Series.prototype.domain = function() {
@@ -47,4 +50,24 @@ Series.prototype.domain = function() {
 			})
 		}
 	};
+};
+
+Series.prototype.nearestPoint = function(x) {
+	if(this.data.length === 0){
+		return;
+	}
+	var x_values = this.data.map(function(pt){
+		return pt.x;
+	});
+	var dist = x_values.map(function(_x){return Math.abs(x - _x);});
+	var idx = dist.indexOf(d3.min(dist));
+	return {
+		x:this.data[idx].x,
+		y: this.data[idx].y
+	};
+};
+
+Series.prototype.highlightPoint = function(x) {
+	var pt = this.nearestPoint(x);
+	this._highlightPoint.attr("cx",this._chart._x(pt.x)).attr("cy",this._chart._y(pt.y)).classed({"invisible":false}).attr("stroke",this.color);
 };
