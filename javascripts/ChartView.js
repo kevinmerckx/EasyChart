@@ -177,11 +177,9 @@ ChartView.prototype.fromRelativePositionToPixels = function(pos) {
  * % in viewbox to values
  */
 ChartView.prototype.fromRelativePositionToValues = function(pos) {
-	pos.x = pos.x * this._domainViewBox.x.max / 100.0;
-	pos.y = pos.y * this._domainViewBox.y.max / 100.0;
 	return {
-		x: this._inverse_x(pos.x),
-		y: this._inverse_y(pos.y)
+		x: this._inverse_x(pos.x * this._domainViewBox.x.max / 100.0),
+		y: this._inverse_y(pos.y * this._domainViewBox.y.max / 100.0)
 	};
 };
 

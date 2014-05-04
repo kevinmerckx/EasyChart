@@ -23,7 +23,7 @@ var EasyChart = function (selector) {
 		};
 		
 		that._chartView.showXVericalLine(values.x);
-		that._annotationLayer.showXPosition(x,values.x);
+		that._annotationLayer.showXPosition(relativePosition.x,values.x);
 		that.series.forEach(function(series){
 			var nearestPoint = series.series.nearestPoint(values.x);
 			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
