@@ -36,7 +36,11 @@
 							y: Math.random()*100
 						});
 					}
-						MYCHART.update();
+					MYCHART.update();
+					
+					setInterval(function(){
+						d3.select("div.container").classed({"big":!d3.select("div.container").classed("big")});
+					},5000);
 				})();
 			</script>
 		</div>

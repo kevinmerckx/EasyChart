@@ -149,38 +149,46 @@ ChartView.prototype.moveXVericalLine = function(x) {
 	return this;
 };
 
+/** 
+ * From pixels to percentage %
+ */
 ChartView.prototype.fromPixelsToRelativePosition = function(pos) {
 	var rect = this._svg[0][0].getBoundingClientRect();
-	// first convert into viewbox pixels
-	var a_x = (this._domainViewBox.x.max - this._domainViewBox.x.min)/(rect.width-1);
-	var a_y = (this._domainViewBox.y.max - this._domainViewBox.y.min)/(rect.height-1);
+	var a_x = 100.0/(rect.width-1);
+	var a_y = 100.0/(rect.height-1);
 	return {
-		x: a_x * pos.x + this._domainViewBox.x.min,
-		y: a_y * pos.y + this._domainViewBox.y.min
+		x: a_x * pos.x,
+		y: a_y * pos.y
 	};
 };
 
 ChartView.prototype.fromRelativePositionToPixels = function(pos) {
 	var rect = this._svg[0][0].getBoundingClientRect();
 	// first convert into viewbox pixels
-	var a_x = (this._domainViewBox.x.max - this._domainViewBox.x.min)/(rect.width-1);
-	var a_y = (this._domainViewBox.y.max - this._domainViewBox.y.min)/(rect.height-1);
+	var a_x = (rect.width-1)/100.0;
+	var a_y = (rect.height-1)/100.0;
 	return {
-		x: (pos.x - this._domainViewBox.x.min)/a_x,
-		y: (pos.y - this._domainViewBox.y.min)/a_y
+		x: a_x*pos.x,
+		y: a_y*pos.y
 	};
 };
 
+/** 
+ * % in viewbox to values
+ */
 ChartView.prototype.fromRelativePositionToValues = function(pos) {
+	pos.x = pos.x * this._domainViewBox.x.max / 100.0;
+	pos.y = pos.y * this._domainViewBox.y.max / 100.0;
 	return {
 		x: this._inverse_x(pos.x),
 		y: this._inverse_y(pos.y)
 	};
 };
 
+/** From values to % in viewbox */
 ChartView.prototype.fromValuesToRelativePosition = function(pos) {
 	return {
-		x: this._x(pos.x),
-		y: this._y(pos.y)
+		x: this._x(pos.x) * 100.0 /this._domainViewBox.x.max,
+		y: this._y(pos.y) * 100.0 /this._domainViewBox.y.max
 	};
 };

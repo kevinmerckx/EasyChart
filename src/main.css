@@ -13,4 +13,8 @@ div.container {
 	height: 400px;
 }
 
+div.container.big {
+	width: 1000px;
+}
+
 

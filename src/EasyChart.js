@@ -26,7 +26,7 @@ var EasyChart = function (selector) {
 		that._annotationLayer.showXPosition(x,values.x);
 		that.series.forEach(function(series){
 			var nearestPoint = series.series.nearestPoint(values.x);
-			var pixelsPosition = that._chartView.fromRelativePositionToPixels(that._chartView.fromValuesToRelativePosition(nearestPoint));
+			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
 			that._annotationLayer.showDataPoint(series.highlightPoint.style("stroke",series.series.color), pixelsPosition.x, pixelsPosition.y);
 		});
 	}).on("mouseleave",function(){
@@ -61,12 +61,12 @@ EasyChart.prototype.update = function() {
 	this._chartView.update();
 	
 	if(this.state.valuesOnMouse) {
-		var pos = this._chartView.fromRelativePositionToPixels(this._chartView.fromValuesToRelativePosition(this.state.valuesOnMouse));
+		var pos = this._chartView.fromValuesToRelativePosition(this.state.valuesOnMouse);
 		this._chartView.moveXVericalLine(this.state.valuesOnMouse.x);
 		this._annotationLayer.moveXPosition(pos.x,this.state.valuesOnMouse.x);
 		that.series.forEach(function(series){
 			var nearestPoint = series.series.nearestPoint(that.state.valuesOnMouse.x);
-			var pixelsPosition = that._chartView.fromRelativePositionToPixels(that._chartView.fromValuesToRelativePosition(nearestPoint));
+			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
 			that._annotationLayer.showDataPoint(series.highlightPoint.style("stroke",series.series.color), pixelsPosition.x, pixelsPosition.y);
 		});
 	}

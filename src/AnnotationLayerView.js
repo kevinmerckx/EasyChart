@@ -33,7 +33,7 @@ AnnotationLayerView.prototype.showXPosition = function(x,str) {
 
 AnnotationLayerView.prototype.moveXPosition = function(x,str) {
 	this.xAnnotation
-	.style({"left":x + "px"})
+	.style({"left":x + "%"})
 	.text(str)
 	return this;
 };
@@ -44,7 +44,7 @@ AnnotationLayerView.prototype.hideXPosition = function(str) {
 };
 
 AnnotationLayerView.prototype.showDataPoint = function(dataPoint,x,y) {
-	dataPoint.style({"left":x + "px","top":y+"px"}).classed({"visible":true});
+	dataPoint.style({"left":x + "%","top":y+"%"}).classed({"visible":true});
 	return this;
 };
 
