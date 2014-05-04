@@ -1,31 +1,7 @@
-var Series = function(series,chart,g) {
-	this._chart = chart;
+var Series = function(series) {
 	this.data = series.data || [];
 	this.legend = series.legend || "";
 	this.color = series.color || "blue";
-	this._g = g;
-	this._g.classed({
-		"series":true
-	});
-	this._line = d3.svg.line()
-	.x(function(d){
-		return chart._x(d.x)
-	})
-	.y(function(d){
-		return chart._y(d.y);
-	});
-	this._path = this._g.append("path");
-	this._path.classed({"curve":true}).attr("stroke",this.color);
-	this._highlightPoint = this._g.append("circle").attr("r",10).classed({"highlight-pt":true});
-};
-
-// this method should cause the EasyChart to draw everything
-Series.prototype.update = function() {
-	if(this.data.length > 1){
-		this._path.transition().attr("d",this._line(this.data)).attr("stroke",this.color);
-	}
-	this._highlightPoint.classed({"invisible":true});
-
 };
 
 Series.prototype.domain = function() {

@@ -1,17 +1,11 @@
+@light-gray: #ECECEC;
+@dark-gray: #444444;
+
 div.easychart {
 	cursor: crosshair;
 	margin: 0;
 	padding: 0;
 	position: relative;
-	
-	div.annotation-layer {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 2;
-	}
 	
 	svg.chart {
 		position: absolute;
@@ -41,14 +35,53 @@ div.easychart {
 		
 		path.vertical-line-marker {
 			stroke: black;
-			opacity: 0.3;
+			opacity: 0;
 			stroke-width: 2px;
+			
+			&.visible {
+				opacity: 0.3;
+			}
 		}
 
 	}
 	
-	svg.annotations {
+	div.annotation-layer {
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100%;
+		z-index: 2;
+		
+		div.annotation {
+			position: absolute;
+			display: none;
+			padding: 0.2em 0.5em;
+			background-color: @dark-gray;
+			color: white;
+			border-radius: 2px;
+			
+			&.visible {
+				display: block;
+			}
+		}
+		
+		svg.data-point {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			transform: translate(-50%,-50%);
+			-webkit-transform: translate(-50%,-50%);
+			-moz-transform: translate(-50%,-50%);
+			-ms-transform: translate(-50%,-50%);
+			fill: none;
+			stroke-width: 5;
+			display: none;
+			
+			&.visible {
+				display: block;
+			}
+		}
+		
 	}
 }
