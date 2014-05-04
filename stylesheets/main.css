@@ -1,12 +1,12 @@
 div.container {
 	margin: 20px auto;
+	border: black 1px solid;
+	width: 70%;
 	height: 200px;
-	width: 50%;
 	transition: width 2s;
+	-webkit-transition: width 2s;
 	-moz-transition: width 2s;
 	-ms-transition: width 2s;
-	-webkit-transition: width 2s;
-	border: #ececec 2px solid;
 }
 
 div.container.big {

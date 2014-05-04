@@ -6,14 +6,37 @@ var EasyChart = function (selector) {
 	
 	this._root = d3.select(selector).classed({"easychart":true});
 	
-	this._annotationLayer = this._root.append("div").classed({"annotation-layer":true});
-	this._annotationLayer.on("mousemove",function(){
-		var pos = d3.mouse(this);
-		// get (x,y) with x and y in value coordinates
-		console.log(pos , " ---- > " ,that._chartView.fromPixelsToValues(pos[0],pos[1]));
-		that._chartView.showXVericalLine(that._chartView.fromPixelsToValues(pos[0],pos[1]).x);
+	this._annotationLayer = new AnnotationLayerView(this._root.append("div"));
+	this.series = [];
+	this.state = {
+		// valuesOnMouse.x & valuesOnMouse.y
+	};
+	this._annotationLayer
+	.on("mousemove",function(x,y){
+		var relativePosition = that._chartView.fromPixelsToRelativePosition({x:x,y:y});
+		var values = that._chartView.fromRelativePositionToValues(relativePosition);
+		
+		// we save the state
+		that.state.valuesOnMouse = {
+			x: values.x,
+			y: values.y
+		};
+		
+		that._chartView.showXVericalLine(values.x);
+		that._annotationLayer.showXPosition(x,values.x);
+		that.series.forEach(function(series){
+			var nearestPoint = series.series.nearestPoint(values.x);
+			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
+			that._annotationLayer.showDataPoint(series.highlightPoint.style("stroke",series.series.color), pixelsPosition.x, pixelsPosition.y);
+		});
+	}).on("mouseleave",function(){
+		that._annotationLayer.hideXPosition();
+		that._chartView.hideXVericalLine();
+		that.series.forEach(function(series){
+			that._annotationLayer.hideDataPoint(series.highlightPoint);
+		});
 	});
-	this._chartView = new EasyChartView(this._root.append("svg"));
+	this._chartView = new ChartView(this._root.append("svg"));
 
 };
 
@@ -23,18 +46,32 @@ var EasyChart = function (selector) {
 	// returns a Series object:
 	// - update 
 EasyChart.prototype.addSeries = function(series) {
-	var seriesObj = this._chartView.addSeries(series);
+	var seriesObj = new Series(series);
+	this.series.push({
+		series: seriesObj,
+		highlightPoint: this._annotationLayer.makeDataPointView()
+	});
+	this._chartView.addSeries(seriesObj);
 	this.update();
 	return seriesObj;
 };
 
-/**
- *
- */
-// TODO OPTIMIZE
-
 EasyChart.prototype.update = function() {
+	var that = this;
 	this._chartView.update();
+	
+	if(this.state.valuesOnMouse) {
+		var pos = this._chartView.fromValuesToRelativePosition(this.state.valuesOnMouse);
+		this._chartView.moveXVericalLine(this.state.valuesOnMouse.x);
+		this._annotationLayer.moveXPosition(pos.x,this.state.valuesOnMouse.x);
+		that.series.forEach(function(series){
+			var nearestPoint = series.series.nearestPoint(that.state.valuesOnMouse.x);
+			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
+			that._annotationLayer.showDataPoint(series.highlightPoint.style("stroke",series.series.color), pixelsPosition.x, pixelsPosition.y);
+		});
+	}
+	
+	
 	return this;
 };
 
