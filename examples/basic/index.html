@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet/less" type="text/css"  href="../../stylesheets/EasyChart.less">
+		
+		<script src="../../javascripts/dependencies/less.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="../../javascripts/dependencies/observable.js" type="text/javascript"></script>
+
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="../../javascripts/Series.js" charset="utf-8"></script>
+		<script src="../../javascripts/ChartView.js" charset="utf-8"></script>
+		<script src="../../javascripts/AnnotationLayerView.js" charset="utf-8"></script>
+		<script src="../../javascripts/EasyChart.js" charset="utf-8"></script>
+
+		<link rel="stylesheet" type="text/css" href="../stylesheets/main.css">
+
+	</head>
+	
+	<body>
+		<div class="container">
+			<script>
+				(function(){
+					MYCHART = new EasyChart("div.container");
+					
+					SERIES1 = MYCHART.addSeries({
+					data: [],
+					legend:"Serie 1"});
+					SERIES2 = MYCHART.addSeries({
+					data: [],
+					legend:"Serie 2",color:"red"});
+					for(var i=0;i<30;i++) {
+						SERIES1.data.push({
+							x: i,
+							y: Math.round(Math.random()*10)
+						});
+						SERIES2.data.push({
+							x: i,
+							y: Math.round(Math.random()*10 + 5)
+						});
+					}
+					MYCHART.update();
+					
+					setInterval(function(){
+						//d3.select("div.container").classed({"big":!d3.select("div.container").classed("big")});
+					},5000);
+				})();
+			</script>
+		</div>
+	</body>
+</html>

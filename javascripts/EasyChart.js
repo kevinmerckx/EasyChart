@@ -11,6 +11,7 @@ var EasyChart = function (selector) {
 	this.state = {
 		// valuesOnMouse.x & valuesOnMouse.y
 	};
+	
 	this._annotationLayer
 	.on("mousemove",function(x,y){
 		var relativePosition = that._chartView.fromPixelsToRelativePosition({x:x,y:y});
@@ -22,16 +23,14 @@ var EasyChart = function (selector) {
 			y: values.y
 		};
 		
-		that._chartView.showXVericalLine(values.x);
-		that._annotationLayer.showXPosition(relativePosition.x,values.x);
+		that.updateOnMouseMoveAnnotations();
+		
+		that._annotationLayer.showXPosition();
 		that.series.forEach(function(series){
-			var nearestPoint = series.series.nearestPoint(values.x);
-			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
-			that._annotationLayer.showDataPoint(series.highlightPoint.style("stroke",series.series.color), pixelsPosition.x, pixelsPosition.y);
+			that._annotationLayer.showDataPoint(series.highlightPoint.color(series.series.color));
 		});
 	}).on("mouseleave",function(){
 		that._annotationLayer.hideXPosition();
-		that._chartView.hideXVericalLine();
 		that.series.forEach(function(series){
 			that._annotationLayer.hideDataPoint(series.highlightPoint);
 		});
@@ -60,18 +59,21 @@ EasyChart.prototype.update = function() {
 	var that = this;
 	this._chartView.update();
 	
+	this.updateOnMouseMoveAnnotations();
+	
+	return this;
+};
+
+EasyChart.prototype.updateOnMouseMoveAnnotations = function() {
+	var that = this;
 	if(this.state.valuesOnMouse) {
 		var pos = this._chartView.fromValuesToRelativePosition(this.state.valuesOnMouse);
-		this._chartView.moveXVericalLine(this.state.valuesOnMouse.x);
-		this._annotationLayer.moveXPosition(pos.x,this.state.valuesOnMouse.x);
+		this._annotationLayer.moveXPosition(pos.x,that._chartView.xScale.tickFormat()(this.state.valuesOnMouse.x));
 		that.series.forEach(function(series){
 			var nearestPoint = series.series.nearestPoint(that.state.valuesOnMouse.x);
 			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
-			that._annotationLayer.showDataPoint(series.highlightPoint.style("stroke",series.series.color), pixelsPosition.x, pixelsPosition.y);
+			that._annotationLayer.moveDataPoint(series.highlightPoint.color(series.series.color).text(that._chartView.yScale.tickFormat()(nearestPoint.y)), pixelsPosition.x, pixelsPosition.y);
 		});
 	}
-	
-	
-	return this;
 };
 

@@ -1,7 +1,7 @@
 var ChartView = function(svg) {
 	this._svg = svg;
 	this._series = [];
-
+	
 	this._domainViewBox = {
 		x: {
 			min: 0,
@@ -22,10 +22,9 @@ var ChartView = function(svg) {
 	this._svg.classed({"chart":true})
 	.attr("viewBox",this._viewbox.min_x + " " + this._viewbox.min_y + " " + this._viewbox.width + " " + this._viewbox.height)
 	.attr("preserveAspectRatio","none");
-	
-	this._verticalLine = this._svg.append("path").classed({"vertical-line-marker":true});
-	
+		
 	this.xScale = d3.scale.linear();
+	this.yScale = d3.scale.linear();
 };
 
 ChartView.prototype.addSeries = function(series) {
@@ -54,13 +53,13 @@ ChartView.prototype.addSeries = function(series) {
 ChartView.prototype._updateTransformations = function() {
 	
 	var domain = this.xScale.domain();
-	var range = this.xScale.range();
+	var range = this.yScale.domain();
 	
 	var min_x = domain[0];
-	var max_x = domain[1];
+	var max_x = domain[domain.length - 1];
 	
 	var min_y = range[0];
-	var max_y = range[1];
+	var max_y = range[range.length - 1];
 	
 	var range_x = max_x - min_x;
 	var range_y = max_y - min_y;
@@ -116,36 +115,39 @@ ChartView.prototype._updateDomainAndRange = function() {
 
 	this.xScale
 	.domain([min_x,max_x])
-	.nice()
-	.range([min_y,max_y]);
+	.range([min_x,max_x])
+	.nice();
+	
+	this.yScale
+	.domain([min_y,max_y])
+	.range([min_y,max_y])
+	.nice();
 };
 
 ChartView.prototype.update = function() {
 	var that = this;
+	
+	/**
+	 * We need to update domains, ranges, transformations
+	 */
 	this._updateDomainAndRange();
 	this._updateTransformations();
+	
+	this._svg.selectAll("path.y-line").remove();
+	var line = d3.svg.line().x(function(d){return d.x}).y(function(d){return d.y});
+	this.yScale.ticks().forEach(function(y) {
+		var tmpY = that._y(y);
+		that._svg.insert("path",":first-child")
+		.attr("d", 
+			  line(
+			  [{x:that._domainViewBox.x.min,y:tmpY},{x:that._domainViewBox.x.max,y:tmpY}]))
+		.classed({"y-line":true});
+	});
+
 	this._series.forEach(function(series){
 		series.path.transition().attr("d",that._lineSeries(series.series.data)).attr("stroke",series.series.color);
 	});
-		
-	return this;
-};
-
-ChartView.prototype.hideXVericalLine = function(x) {
-	this._verticalLine.classed({"visible":false});
-	return this;
-};
-
-ChartView.prototype.showXVericalLine = function(x) {
-	this.moveXVericalLine(x);
-	this._verticalLine.classed({"visible":true});
-	return this;
-};
-
-ChartView.prototype.moveXVericalLine = function(x) {
-	x = this._x(x);
-	var line = d3.svg.line().x(function(d){return d.x}).y(function(d){return d.y});
-	this._verticalLine.attr("d",line([{x:x,y:this._domainViewBox.y.min},{x:x,y:this._domainViewBox.y.max}]));
+	
 	return this;
 };
 

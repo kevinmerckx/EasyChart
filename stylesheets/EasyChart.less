@@ -14,6 +14,7 @@ div.easychart {
 		width: 100%;
 		height: 100%;
 		z-index: 1;
+		vector-effect: non-scaling-stroke;
 		
 		g.series {
 		}
@@ -21,26 +22,23 @@ div.easychart {
 		g.series path.curve {
 			fill: none;
 			stroke-width: 1px;
-			vector-effect: non-scaling-stroke;
-		}
-
-		g.series .highlight-pt {
-			stroke-width: 8px;
-			fill: none;
-		}
-
-		g.series .highlight-pt.invisible {
-			display: none;
 		}
 		
 		path.vertical-line-marker {
 			stroke: black;
-			opacity: 0;
+			stroke-opacity: 0;
 			stroke-width: 2px;
 			
 			&.visible {
-				opacity: 0.3;
+				stroke-opacity: 0.3;
 			}
+		}
+		
+		path.y-line {
+			stroke: black;
+			stroke-opacity: 0.2;
+			stroke-width: 2px;
+			fill: none;
 		}
 
 	}
@@ -52,35 +50,77 @@ div.easychart {
 		width: 100%;
 		height: 100%;
 		z-index: 2;
+		font-size: 80%;
 		
-		div.annotation {
-			position: absolute;
-			display: none;
+		.annotation {
 			padding: 0.2em 0.5em;
-			background-color: @dark-gray;
-			color: white;
-			border-radius: 2px;
+			border-radius: 0.2em;
+		}
+		
+		div.vertical-annotation {
+			position: absolute;
+			visibility: hidden;
+			height: 100%;
+			top: 0;
+			margin: 0;
+			padding: 0;
 			
 			&.visible {
-				display: block;
+				visibility: visible;
+			}
+			
+			svg {
+				width: 1px;
+				height: 100%;
+				fill: @dark-gray;
+				fill-opacity: 0.4;
+			}
+			
+			div.text {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				background-color: @dark-gray;
+				color: white;
+				margin: 0;
 			}
 		}
 		
-		svg.data-point {
+		div.data-point {
 			position: absolute;
-			width: 10px;
-			height: 10px;
-			transform: translate(-50%,-50%);
-			-webkit-transform: translate(-50%,-50%);
-			-moz-transform: translate(-50%,-50%);
-			-ms-transform: translate(-50%,-50%);
-			fill: none;
-			stroke-width: 5;
-			display: none;
+			transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+			-moz-transform: translateY(-50%);
+			-ms-transform: translateY(-50%);
+			visibility: hidden;
 			
 			&.visible {
-				display: block;
+				visibility: visible;
 			}
+			
+			&>* {
+				vertical-align: middle;
+			}
+			
+			svg {
+				position: absolute;
+				left: 0%;
+				top: 50%;
+				width: 10px;
+				height: 10px;
+				fill: none;
+				stroke-width: 5;
+				transform: translate(-50%,-50%);
+				-webkit-transform: translate(-50%,-50%);
+				-moz-transform: translate(-50%,-50%);
+				-ms-transform: translate(-50%,-50%);
+			}
+			
+			span.annotation {
+				margin: 7px;
+			}
+			
+			
 		}
 		
 	}
