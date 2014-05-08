@@ -1,18 +1,29 @@
 @light-gray: #ECECEC;
 @dark-gray: #444444;
+@width-y-axis: 40px;
+@height-x-axis: 40px;
+@width-chart: ~"calc(100% - 40px)";
+@height-chart: ~"calc(100% - 40px)";
 
 div.easychart {
 	cursor: crosshair;
 	margin: 0;
 	padding: 0;
 	position: relative;
-	
-	svg.chart {
+}
+
+div.easychart {
+	svg.chart,div.annotation-layer {
 		position: absolute;
 		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+		right: 0;
+		width: @width-chart;
+		height: @height-chart;
+	}
+}
+
+div.easychart {
+	svg.chart {
 		z-index: 1;
 		vector-effect: non-scaling-stroke;
 		
@@ -42,13 +53,12 @@ div.easychart {
 		}
 
 	}
-	
+}
+
+div.easychart {
+
 	div.annotation-layer {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+		
 		z-index: 2;
 		font-size: 80%;
 		
@@ -123,5 +133,32 @@ div.easychart {
 			
 		}
 		
+	}
+}
+
+div.easychart {
+	
+	div.axis {
+		position:absolute;
+	}
+	
+	div.axis.x-axis {
+		right: 0;
+		bottom: 0;
+		height: @height-x-axis;
+		width: @width-chart;
+		
+		svg {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 20%;
+			
+			path {
+				stroke: black;
+				stroke-width: 1px;
+			}
+		}
 	}
 }

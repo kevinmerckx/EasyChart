@@ -11,6 +11,7 @@ div.container {
 	border: black 1px solid;
 	width: 800px;
 	height: 400px;
+	margin:auto;
 }
 
 div.container.big {

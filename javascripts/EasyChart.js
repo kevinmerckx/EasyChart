@@ -7,6 +7,8 @@ var EasyChart = function (selector) {
 	this._root = d3.select(selector).classed({"easychart":true});
 	
 	this._annotationLayer = new AnnotationLayerView(this._root.append("div"));
+	this._xAxis = new XAxisView(this._root.append("div"));
+	
 	this.series = [];
 	this.state = {
 		// valuesOnMouse.x & valuesOnMouse.y
@@ -58,6 +60,8 @@ EasyChart.prototype.addSeries = function(series) {
 EasyChart.prototype.update = function() {
 	var that = this;
 	this._chartView.update();
+	
+	this._xAxis.setScale(this._chartView.xScale);
 	
 	this.updateOnMouseMoveAnnotations();
 	
