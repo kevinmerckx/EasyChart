@@ -1,6 +1,5 @@
 div.container {
 	margin: 20px auto;
-	border: black 1px solid;
 	width: 70%;
 	height: 200px;
 	transition: width 2s;

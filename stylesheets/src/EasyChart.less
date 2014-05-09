@@ -1,24 +1,38 @@
 @light-gray: #ECECEC;
 @dark-gray: #444444;
+@width-y-axis: 40px;
+@height-x-axis: 40px;
+@width-chart: ~"calc(100% - 40px)";
+@height-chart: ~"calc(100% - 40px)";
 
 div.easychart {
 	cursor: crosshair;
 	margin: 0;
 	padding: 0;
 	position: relative;
-	
-	svg.chart {
+}
+
+div.easychart {
+	svg.chart,div.annotation-layer {
 		position: absolute;
 		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+		right: 0;
+		width: @width-chart;
+		height: @height-chart;
+	}
+}
+
+div.easychart {
+	svg.chart {
 		z-index: 1;
-		vector-effect: non-scaling-stroke;
+		
+		path {
+			vector-effect: non-scaling-stroke;
+		}
 		
 		g.series {
 		}
-
+		
 		g.series path.curve {
 			fill: none;
 			stroke-width: 1px;
@@ -27,7 +41,7 @@ div.easychart {
 		path.vertical-line-marker {
 			stroke: black;
 			stroke-opacity: 0;
-			stroke-width: 2px;
+			stroke-width: 1px;
 			
 			&.visible {
 				stroke-opacity: 0.3;
@@ -37,18 +51,17 @@ div.easychart {
 		path.y-line {
 			stroke: black;
 			stroke-opacity: 0.2;
-			stroke-width: 2px;
+			stroke-width: 1px;
 			fill: none;
 		}
 
 	}
-	
+}
+
+div.easychart {
+
 	div.annotation-layer {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+		
 		z-index: 2;
 		font-size: 80%;
 		
@@ -74,11 +87,15 @@ div.easychart {
 				height: 100%;
 				fill: @dark-gray;
 				fill-opacity: 0.4;
+				
+				* {
+					vector-effect: non-scaling-stroke;
+				}
 			}
 			
 			div.text {
 				position: absolute;
-				bottom: 0;
+				top: 100%;
 				left: 0;
 				background-color: @dark-gray;
 				color: white;
@@ -119,9 +136,72 @@ div.easychart {
 			span.annotation {
 				margin: 7px;
 			}
+		}
+	}
+}
+
+div.easychart {
+	
+	div.axis {
+		position:absolute;
+		z-index: 1;
+		
+		svg {
+			position: absolute;
 			
-			
+			line {
+				vector-effect: non-scaling-stroke;
+				stroke: black;
+				stroke-width: 1px;
+			}
 		}
 		
+		div.label {
+			position: absolute;
+		}
+	}
+	
+	div.axis.x-axis {
+		right: 0;
+		bottom: 1px;
+		height: @height-x-axis;
+		width: @width-chart;
+		
+		svg {
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 20%;
+		}
+		
+		div.label {
+			top: 20%;
+			transform: translateX(-50%);
+			-webkit-transform: translateX(-50%);
+			-moz-transform: translateX(-50%);
+			-ms-transform: translateX(-50%);
+		}
+	}
+	
+	div.axis.y-axis {
+		left: 1px;
+		top: 0;
+		height: @height-chart;
+		width: @width-y-axis;
+		
+		svg {
+			top: 0;
+			right: 0;
+			height: 100%;
+			width: 20%;
+		}
+		
+		div.label {
+			right: 20%;
+			transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+			-moz-transform: translateY(-50%);
+			-ms-transform: translateY(-50%);
+		}
 	}
 }

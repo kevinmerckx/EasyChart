@@ -7,6 +7,9 @@ var EasyChart = function (selector) {
 	this._root = d3.select(selector).classed({"easychart":true});
 	
 	this._annotationLayer = new AnnotationLayerView(this._root.append("div"));
+	this._xAxis = new XAxisView(this._root.append("div"));
+	this._yAxis = new YAxisView(this._root.append("div"));
+	
 	this.series = [];
 	this.state = {
 		// valuesOnMouse.x & valuesOnMouse.y
@@ -51,13 +54,15 @@ EasyChart.prototype.addSeries = function(series) {
 		highlightPoint: this._annotationLayer.makeDataPointView()
 	});
 	this._chartView.addSeries(seriesObj);
-	this.update();
 	return seriesObj;
 };
 
 EasyChart.prototype.update = function() {
 	var that = this;
 	this._chartView.update();
+	
+	this._xAxis.setScale(this._chartView.xScale);
+	this._yAxis.setScale(this._chartView.yScale);
 	
 	this.updateOnMouseMoveAnnotations();
 	
@@ -72,7 +77,11 @@ EasyChart.prototype.updateOnMouseMoveAnnotations = function() {
 		that.series.forEach(function(series){
 			var nearestPoint = series.series.nearestPoint(that.state.valuesOnMouse.x);
 			var pixelsPosition = that._chartView.fromValuesToRelativePosition(nearestPoint);
-			that._annotationLayer.moveDataPoint(series.highlightPoint.color(series.series.color).text(that._chartView.yScale.tickFormat()(nearestPoint.y)), pixelsPosition.x, pixelsPosition.y);
+			series.highlightPoint.color(series.series.color).text(that._chartView.yScale.tickFormat()(nearestPoint.y));
+			that._annotationLayer.moveDataPoint(
+				series.highlightPoint,
+				pixelsPosition.x, 
+				pixelsPosition.y);
 		});
 	}
 };
