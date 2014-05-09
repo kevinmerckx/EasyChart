@@ -1,4 +1,4 @@
 [submodule "EasyChart"]
 	path = EasyChart
-	url = git@github.com:kevinmerckx/EasyChart.git
+	url = https://github.com/kevinmerckx/EasyChart.git
 	branch = master
