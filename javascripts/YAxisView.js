@@ -1,40 +1,40 @@
-var XAxisView = function (element) {
+var YAxisView = function (element) {
 	
 	this.root = element;
 	this.root.classed({
 		"axis" : true,
-		"x-axis" : true
+		"y-axis" : true
 	});
 	
-	this.svg = this.root.append("svg").attr("viewBox", "0 0 1000 100").attr("preserveAspectRatio", "none");
-	this.pathAxis = this.svg.append("line").attr({"x1": 0, "y1": 0, "x2": 1000, "y2": 0});
+	this.svg = this.root.append("svg").attr("viewBox", "0 0 100 1000").attr("preserveAspectRatio", "none");
+	this.pathAxis = this.svg.append("line").attr({"x1": 100, "y1": 0, "x2": 100, "y2": 1000});
 };
 
-XAxisView.prototype.setScale = function (scale) {
+YAxisView.prototype.setScale = function (scale) {
 	var scaleTicks = scale.ticks();
 	var domain = scale.domain();
-	var a = 1000.0/(domain[1]-domain[0]);
-	var b = -a*domain[0];
+	var a = 1000.0/(domain[0]-domain[1]);
+	var b = -a*domain[1];
 	
 	var ticks = this.svg.selectAll("line.tick").data(scaleTicks);
 	ticks.enter().append("line").classed({"tick":true});
 	ticks
-	.attr("x1",
+	.attr("y1",
 		  function(d) {
 			  return a*d + b;
 	})
-	.attr("x2",
+	.attr("y2",
 		  function(d){
 			  return a*d + b;
 	})
-	.attr("y1",0).attr("y2",100);
+	.attr("x1",0).attr("x2",100);
 	ticks.exit().remove();
 	
-	var a = 100.0/(domain[1]-domain[0]);
-	var b = -a*domain[0];
+	var a = 100.0/(domain[0]-domain[1]);
+	var b = -a*domain[1];
 	var labels = this.root.selectAll("div.label").data(scaleTicks);
 	labels.enter().append("div").classed({"label":true});
-	labels.style("left",function(d){
+	labels.style("top",function(d){
 		return a*d+b + "%";
 	}).text(function(d,i){
 		return scaleTicks[i];
