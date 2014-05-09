@@ -8,9 +8,9 @@ body {
 }
 
 div.container {
-	border: black 1px solid;
 	width: 800px;
 	height: 400px;
+	margin: 20px auto;
 }
 
 div.container.big {
