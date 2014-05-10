@@ -13,12 +13,20 @@ div.easychart {
 }
 
 div.easychart {
-	svg.chart,div.annotation-layer {
+	div.annotation-layer {
 		position: absolute;
 		top: 0;
 		right: 0;
 		width: @width-chart;
 		height: @height-chart;
+		
+		svg {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100%;
+		}
 	}
 }
 
@@ -62,10 +70,10 @@ div.easychart {
 
 	div.annotation-layer {
 		
-		z-index: 2;
 		font-size: 80%;
 		
 		.annotation {
+			z-index: 2;
 			padding: 0.2em 0.5em;
 			border-radius: 0.2em;
 		}

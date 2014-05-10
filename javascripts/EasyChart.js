@@ -6,19 +6,23 @@ var EasyChart = function (selector) {
 	
 	this._root = d3.select(selector).classed({"easychart":true});
 	
-	this._annotationLayer = new AnnotationLayerView(this._root.append("div"));
+	this._chartZone = this._root.append("div");
+	this._chartView = new ChartView(this._chartZone);
+	this._annotationLayer = new AnnotationLayerView(this._chartZone);
+	
 	this._xAxis = new XAxisView(this._root.append("div"));
 	this._yAxis = new YAxisView(this._root.append("div"));
 	
 	this.series = [];
+	
 	this.state = {
 		// valuesOnMouse.x & valuesOnMouse.y
 	};
-	
+
 	this._annotationLayer
 	.on("mousemove",function(x,y){
-		var relativePosition = that._chartView.fromPixelsToRelativePosition({x:x,y:y});
-		var values = that._chartView.fromRelativePositionToValues(relativePosition);
+		var relateivePosition = that._chartView.fromPixelsToRelativePosition({x:x,y:y});
+		var values = that._chartView.fromRelativePositionToValues(relateivePosition);
 		
 		// we save the state
 		that.state.valuesOnMouse = {
@@ -31,15 +35,14 @@ var EasyChart = function (selector) {
 		that._annotationLayer.showXPosition();
 		that.series.forEach(function(series){
 			that._annotationLayer.showDataPoint(series.highlightPoint.color(series.series.color));
-		});
-	}).on("mouseleave",function(){
+		});		
+	})
+	.on("mouseout",function(){
 		that._annotationLayer.hideXPosition();
 		that.series.forEach(function(series){
 			that._annotationLayer.hideDataPoint(series.highlightPoint);
 		});
 	});
-	this._chartView = new ChartView(this._root.append("svg"));
-
 };
 
 // series.data = [{x:,y:}]
@@ -48,6 +51,13 @@ var EasyChart = function (selector) {
 	// returns a Series object:
 	// - update 
 EasyChart.prototype.addSeries = function(series) {
+	var div = this._annotationLayer._root;
+	if(!series.onOver) {
+		series.onOver = function(x,y) {
+			console.log("default over series");
+		}
+	}
+	
 	var seriesObj = new Series(series);
 	this.series.push({
 		series: seriesObj,

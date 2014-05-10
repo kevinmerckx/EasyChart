@@ -1,5 +1,8 @@
-var ChartView = function(svg) {
-	this._svg = svg;
+var ChartView = function(root) {
+	var that = this;
+	
+	this._root = root; 
+	this._svg = this._root.append("svg");
 	this._series = [];
 	
 	this._domainViewBox = {
@@ -41,7 +44,21 @@ ChartView.prototype.addSeries = function(series) {
 	var g = this._svg.append("g").classed({
 		"series":true
 	});
+	
 	var path = g.append("path").classed({"curve":true});
+	path.on("mouseover",function(){
+		try {
+			series.onOver();
+		} catch(e) {
+		}
+	})
+	.on("mouseout",function() {
+		try {
+		series.onLeave();
+		} catch(e) {
+		}
+	});
+	
 	this._series.push({
 		series: series,
 		g: g,
@@ -192,3 +209,5 @@ ChartView.prototype.fromValuesToRelativePosition = function(pos) {
 		y: this._y(pos.y) * 100.0 /this._domainViewBox.y.max
 	};
 };
+
+makeObservable(ChartView);

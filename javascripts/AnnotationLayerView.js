@@ -1,8 +1,7 @@
 var AnnotationLayerView = function(element) {
 	var that = this;
 	this.root = element
-	.classed({"annotation-layer":true})
-	.on("mouseover",function(){
+	.classed({"annotation-layer":true}).on("mouseover",function(){
 		var pos = d3.mouse(this);
 		that.onMouseMoveOver(pos[0],pos[1]);
 	})
@@ -10,12 +9,8 @@ var AnnotationLayerView = function(element) {
 		var pos = d3.mouse(this);
 		that.onMouseMoveOver(pos[0],pos[1]);
 	})
-	.on("mouseenter",function(){
-		var pos = d3.mouse(this);
-		that.onMouseMoveOver(pos[0],pos[1]);
-	})
-	.on("mouseleave",function(){
-		that.fireEvent("mouseleave");
+	.on("mouseout",function(){
+		that.fireEvent("mouseout");
 	});
 	
 	this.xAnnotation = new VerticalLineAnnotationView(this.root);
@@ -68,7 +63,7 @@ AnnotationLayerView.prototype.makeDataPointView = function() {
 AnnotationLayerView.prototype.update = function() {
 	return this;
 };
-	
+
 makeObservable(AnnotationLayerView);
 
 /**
