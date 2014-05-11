@@ -2,7 +2,8 @@
 <html>
 	<head>
 		<link rel="stylesheet/less" type="text/css"  href="../../stylesheets/EasyChart.less">
-		
+		<link rel="stylesheet/less" type="text/css"  href="../stylesheets/main.less">
+
 		<script src="../../javascripts/dependencies/less.js" type="text/javascript"></script>
 		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script src="../../javascripts/dependencies/observable.js" type="text/javascript"></script>
@@ -15,22 +16,77 @@
 		<script src="../../javascripts/YAxisView.js" charset="utf-8"></script>
 		<script src="../../javascripts/EasyChart.js" charset="utf-8"></script>
 
-		<link rel="stylesheet" type="text/css" href="../stylesheets/main.css">
 
 	</head>
-	
+
 	<body>
 		<div class="container">
 			<script>
 				(function(){
 					MYCHART = new EasyChart("div.container");
-					
+
 					SERIES1 = MYCHART.addSeries({
-					data: [],
-					legend:"Serie 1"});
+						data: [],
+						color:"blue"
+					}).on("mouseover",function(){
+						console.log("on blue series");
+					});
+
 					SERIES2 = MYCHART.addSeries({
-					data: [],
-					legend:"Serie 2",color:"red"});
+						data: [],
+						color:"red"
+					});
+
+					var XIndicator = MYCHART.makeVerticalLine()
+					.style({
+						stroke: "gray",
+						visibility: "hidden"
+					});
+					
+					var labelSeries1 = MYCHART.makeAnnotation("div").classed({
+						label: true,
+						series1: true
+					}).style({
+						visibility: "hidden"
+					});
+					
+					var labelSeries2 = MYCHART.makeAnnotation("div").classed({
+						label: true,
+						series2: true
+					}).style({
+						visibility: "hidden"
+					});
+					
+					var ptSeries1 = MYCHART.makeCirclePoint().style({
+						stroke: "blue",
+						visibility: "hidden"
+					}).on("mouseover",function(){
+						labelSeries1.style({
+							visibility: "visible",
+							left: ptSeries1.datum().relative.x + "%",
+							bottom: (100-ptSeries1.datum().relative.y) + "%"
+						}).html("Series 1<br>x: " + ptSeries1.datum().value.x + "<br>y: " + ptSeries1.datum().value.y);
+					}).on("mouseout",function() {
+						labelSeries1.style({
+							visibility: "hidden"
+						}).html("yoooo");					
+					});
+					
+					var ptSeries2 = MYCHART.makeCirclePoint().style({
+						stroke: "red",
+						visibility: "hidden"
+					}).on("mouseover",function(){
+						labelSeries2.style({
+							visibility: "visible",
+							left: ptSeries2.datum().relative.x + "%",
+							bottom: (100-ptSeries2.datum().relative.y) + "%"
+						}).html("Series 1<br>x: " + ptSeries2.datum().value.x + "<br>y: " + ptSeries2.datum().value.y);
+					}).on("mouseout",function() {
+						labelSeries2.style({
+							visibility: "hidden"
+						}).html("yoooo");					
+					});;
+
 					for(var i=0;i<30;i++) {
 						SERIES1.data.push({
 							x: i,
@@ -42,7 +98,45 @@
 						});
 					}
 					MYCHART.update();
-					
+
+					MYCHART.on("mousemove",function(data) {
+						XIndicator.style({
+							left: data.relative.x + "%",
+							visibility:"visible"
+						});
+						var nearest = SERIES1.nearestPoint(data.value.x);
+						var relative = MYCHART.fromValuesToRelativePosition(nearest);
+						ptSeries1.style({
+							left: relative.x + "%",
+							top : relative.y + "%",
+							visibility: "visible"
+						}).datum({
+							value: nearest,
+							relative: relative
+						});
+									
+						nearest = SERIES2.nearestPoint(data.value.x);
+						relative = MYCHART.fromValuesToRelativePosition(nearest);
+						ptSeries2.style({
+							left: relative.x + "%",
+							top : relative.y + "%",
+							visibility: "visible"
+						}).datum({
+							value: nearest,
+							relative: relative
+						});;
+					}).on("mouseout",function(){
+						XIndicator.style({
+							visibility:"hidden"
+						});
+						ptSeries1.style({
+							visibility: "hidden"
+						});
+						ptSeries2.style({
+							visibility: "hidden"
+						});
+					});
+
 					setInterval(function(){
 						//d3.select("div.container").classed({"big":!d3.select("div.container").classed("big")});
 					},5000);

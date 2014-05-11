@@ -11,6 +11,8 @@ function makeObservable(obj) {
 	};
 	
 	obj.prototype.fireEvent = function(str) {
+		this.__observable = this.__observable ? this.__observable : {handlers:[]};
+
 		if(!this.__observable.handlers[str]) {
 			return;
 		}

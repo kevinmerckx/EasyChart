@@ -45,16 +45,19 @@ ChartView.prototype.addSeries = function(series) {
 		"series":true
 	});
 	
-	var path = g.append("path").classed({"curve":true});
-	path.on("mouseover",function(){
+	
+	var pathInner = g.append("path").classed({"inner-curve":true});
+	
+	var pathOuter = g.append("path").classed({"outer-curve":true});
+	pathOuter.on("mouseover",function(){
 		try {
-			series.onOver();
+			series.fireEvent("mouseover");
 		} catch(e) {
 		}
 	})
 	.on("mouseout",function() {
 		try {
-		series.onLeave();
+			series.fireEvent("mouseout");
 		} catch(e) {
 		}
 	});
@@ -62,7 +65,8 @@ ChartView.prototype.addSeries = function(series) {
 	this._series.push({
 		series: series,
 		g: g,
-		path: path
+		pathInner: pathInner,
+		pathOuter: pathOuter
 	});
 	return this;
 };
@@ -149,20 +153,25 @@ ChartView.prototype.update = function() {
 	 */
 	this._updateDomainAndRange();
 	this._updateTransformations();
+		
+	var ylines = this._svg.selectAll("line.y-line").data(this.yScale.ticks());
 	
-	this._svg.selectAll("path.y-line").remove();
-	var line = d3.svg.line().x(function(d){return d.x}).y(function(d){return d.y});
-	this.yScale.ticks().forEach(function(y) {
-		var tmpY = that._y(y);
-		that._svg.insert("path",":first-child")
-		.attr("d", 
-			  line(
-			  [{x:that._domainViewBox.x.min,y:tmpY},{x:that._domainViewBox.x.max,y:tmpY}]))
-		.classed({"y-line":true});
-	});
+	ylines.exit().remove();
+	ylines.enter().insert("line",":first-child").classed({"y-line":true});
+	
+	ylines
+	.attr("x1", that._domainViewBox.x.min)
+	.attr("x2", that._domainViewBox.x.max)
+	.attr("y1", function(y) { return that._y(y); })
+	.attr("y2", function(y) { return that._y(y); })
 
 	this._series.forEach(function(series){
-		series.path.transition().attr("d",that._lineSeries(series.series.data)).attr("stroke",series.series.color);
+		try {
+			series.pathInner.attr("stroke",series.series.color).transition().duration(500).attr("d",that._lineSeries(series.series.data));
+			series.pathOuter.transition().duration(500).attr("d",that._lineSeries(series.series.data));
+		} catch(e) {
+			console.error("Error on Chartview.update on series ", series); 
+		}
 	});
 	
 	return this;

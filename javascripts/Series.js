@@ -1,8 +1,6 @@
 var Series = function(series) {
 	this.data = series.data || [];
-	this.legend = series.legend || "";
 	this.color = series.color || "blue";
-	this.onOver = series.onOver || function(x,y) {};
 };
 
 Series.prototype.domain = function() {
@@ -42,11 +40,6 @@ Series.prototype.nearestPoint = function(x) {
 		x:this.data[idx].x,
 		y: this.data[idx].y
 	};
-};
-
-Series.prototype.highlightPoint = function(x) {
-	var pt = this.nearestPoint(x);
-	this._highlightPoint.attr("cx",this._chart._x(pt.x)).attr("cy",this._chart._y(pt.y)).classed({"invisible":false}).attr("stroke",this.color);
 };
 
 makeObservable(Series);
