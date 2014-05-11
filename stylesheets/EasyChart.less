@@ -23,8 +23,12 @@ div.easychart {
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: @width-chart;
-		height: @height-chart;
+		width: ~"calc(100% - 40px)";
+		width: ~"-webkit-calc(100% - 40px)";
+		width: ~"-moz-calc(100% - 40px)";
+		height: ~"calc(100% - 40px)";
+		height: ~"-webkit-calc(100% - 40px)";
+		height: ~"-moz-calc(100% - 40px)";
 
 		svg {
 			position: absolute;
@@ -91,7 +95,9 @@ div.easychart {
 		right: 0;
 		bottom: 1px;
 		height: @height-x-axis;
-		width: @width-chart;
+		width: ~"calc(100% - 40px)";
+		width: ~"-webkit-calc(100% - 40px)";
+		width: ~"-moz-calc(100% - 40px)";
 
 		svg {
 			top: 0;
@@ -112,7 +118,9 @@ div.easychart {
 	div.axis.y-axis {
 		left: 1px;
 		top: 0;
-		height: @height-chart;
+		height: ~"calc(100% - 40px)";
+		height: ~"-webkit-calc(100% - 40px)";
+		height: ~"-moz-calc(100% - 40px)";
 		width: @width-y-axis;
 
 		svg {

@@ -17,15 +17,15 @@ var EasyChart = function (selector) {
 
 	this._annotationLayer
 	.on("mousemove",function(x,y){
-		var relateivePosition = that._chartView.fromPixelsToRelativePosition({x:x,y:y});
-		var values = that._chartView.fromRelativePositionToValues(relateivePosition);
+		var relativePosition = that._chartView.fromPixelsToRelativePosition({x:x,y:y});
+		var values = that._chartView.fromRelativePositionToValues(relativePosition);
 
 		that.fireEvent("mousemove",{
 			pixel: {
 				x:x,
 				y:y
 			},
-			relative : relateivePosition, 
+			relative : relativePosition, 
 			value:values
 		});
 

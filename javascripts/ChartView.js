@@ -2,7 +2,7 @@ var ChartView = function(root) {
 	var that = this;
 	
 	this._root = root; 
-	this._svg = this._root.append("svg");
+	this._svg = this._root.append("svg").attr("version","1.1").attr("xmlns","http://www.w3.org/2000/svg");//.attr("xmlns:svg","http://www.w3.org/2000/svg");
 	this._series = [];
 	
 	this._domainViewBox = {
@@ -23,8 +23,12 @@ var ChartView = function(root) {
 	};
 	
 	this._svg.classed({"chart":true})
-	.attr("viewBox",this._viewbox.min_x + " " + this._viewbox.min_y + " " + this._viewbox.width + " " + this._viewbox.height)
-	.attr("preserveAspectRatio","none");
+	.attr({
+		viewBox: this._viewbox.min_x + " " + this._viewbox.min_y + " " + this._viewbox.width + " " + this._viewbox.height,
+		preserveAspectRatio: "none",
+		width: this._viewbox.width,
+		height: this._viewbox.height
+	});
 		
 	this.xScale = d3.scale.linear();
 	this.yScale = d3.scale.linear();
