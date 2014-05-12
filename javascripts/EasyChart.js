@@ -16,17 +16,11 @@ var EasyChart = function (selector) {
 	this.series = [];
 
 	this._annotationLayer
-	.on("mousemove",function(x,y){
-		var relativePosition = that._chartView.fromPixelsToRelativePosition({x:x,y:y});
-		var values = that._chartView.fromRelativePositionToValues(relativePosition);
-
+	.on("mousemove",function(mouse){
 		that.fireEvent("mousemove",{
-			pixel: {
-				x:x,
-				y:y
-			},
-			relative : relativePosition, 
-			value:values
+			pixel: mouse.pixel,
+			relative : mouse.relative, 
+			value: that._chartView.fromRelativePositionToValues(mouse.relative)
 		});
 
 		that.series.forEach(function(series){
@@ -73,8 +67,8 @@ EasyChart.prototype.fromValuesToRelativePosition = function(pt) {
 };
 
 EasyChart.prototype.setXAxisScale = function(d3scale) {
-    this._chartView.xScale = d3scale;
-    return this;
+	this._chartView.xScale = d3scale;
+	return this;
 };
 
 makeObservable(EasyChart);
