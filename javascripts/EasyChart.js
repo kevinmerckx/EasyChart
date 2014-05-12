@@ -4,7 +4,9 @@
 var EasyChart = function (selector) {
 	var that = this;
 
-	this._root = d3.select(selector).classed({"easychart":true});
+	this._root = d3.select(selector).classed({
+		easychart:true
+	});
 
 	this._chartZone = this._root.append("div");
 	this._chartView = new ChartView(this._chartZone);
@@ -19,8 +21,7 @@ var EasyChart = function (selector) {
 	.on("mousemove",function(mouse){
 		that.fireEvent("mousemove",{
 			pixel: mouse.pixel,
-			relative : mouse.relative, 
-			value: that._chartView.fromRelativePositionToValues(mouse.relative)
+			relative : mouse.relative
 		});
 
 		that.series.forEach(function(series){
@@ -55,19 +56,26 @@ EasyChart.prototype.addSeries = function(series) {
 
 EasyChart.prototype.update = function() {
 	this._chartView.update();
-
 	this._xAxis.setScale(this._chartView.xScale);
-	this._yAxis.setScale(this._chartView.yScale);
-
+	this._yAxis.setScale(this._chartView.yScaleSeries._yScale);
 	return this;
 };
 
-EasyChart.prototype.fromValuesToRelativePosition = function(pt) {
-	return this._chartView.fromValuesToRelativePosition({x:pt.x,y:pt.y});
+EasyChart.prototype.fromValuesToRelativePosition = function(series,pt) {
+	return this._chartView.fromValuesToRelativePosition(series,{x:pt.x,y:pt.y});
+};
+
+EasyChart.prototype.fromRelativePositionToValues = function(series,pt) {
+	return this._chartView.fromRelativePositionToValues(series,{x:pt.x,y:pt.y});
 };
 
 EasyChart.prototype.setXAxisScale = function(d3scale) {
 	this._chartView.xScale = d3scale;
+	return this;
+};
+
+EasyChart.prototype.showYAxisOfSeries = function(series) {
+	this._chartView.yScaleSeries = series;
 	return this;
 };
 

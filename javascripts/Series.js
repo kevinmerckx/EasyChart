@@ -1,6 +1,12 @@
 var Series = function(series) {
 	this.data = series.data || [];
 	this.color = series.color || "blue";
+	
+	this._yScale = d3.scale.linear();
+	this._x = function(x) {};
+	this._inverseX = function(x) {};
+	this._y = function(y) {};
+	this._inverseY = function(y) {};
 };
 
 Series.prototype.domain = function() {
@@ -40,6 +46,14 @@ Series.prototype.nearestPoint = function(x) {
 		x:this.data[idx].x,
 		y: this.data[idx].y
 	};
+};
+
+Series.prototype.update = function() {
+	var tmpDomain = this.domain();
+	// we update the scale
+	this._yScale.domain([tmpDomain.y.min,tmpDomain.y.max]);
+	
+	return this;
 };
 
 makeObservable(Series);

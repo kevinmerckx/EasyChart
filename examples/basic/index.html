@@ -42,21 +42,21 @@
 						stroke: "gray",
 						visibility: "hidden"
 					});
-					
+
 					var labelSeries1 = MYCHART.makeAnnotation("div").classed({
 						label: true,
 						series1: true
 					}).style({
 						visibility: "hidden"
 					});
-					
+
 					var labelSeries2 = MYCHART.makeAnnotation("div").classed({
 						label: true,
 						series2: true
 					}).style({
 						visibility: "hidden"
 					});
-					
+
 					var ptSeries1 = MYCHART.makeCirclePoint().style({
 						stroke: "blue",
 						visibility: "hidden"
@@ -69,9 +69,9 @@
 					}).on("mouseout",function() {
 						labelSeries1.style({
 							visibility: "hidden"
-						}).html("yoooo");					
+						});					
 					});
-					
+
 					var ptSeries2 = MYCHART.makeCirclePoint().style({
 						stroke: "red",
 						visibility: "hidden"
@@ -84,19 +84,20 @@
 					}).on("mouseout",function() {
 						labelSeries2.style({
 							visibility: "hidden"
-						}).html("yoooo");					
+						});					
 					});;
 
 					for(var i=0;i<30;i++) {
 						SERIES1.data.push({
 							x: i,
-							y: Math.round(Math.random()*10)
+							y: Math.round(Math.random()*10000)
 						});
 						SERIES2.data.push({
 							x: i,
-							y: Math.round(Math.random()*10 + 5)
+							y: Math.random()*2 - 1
 						});
 					}
+					MYCHART.showYAxisOfSeries(SERIES1);
 					MYCHART.update();
 
 					MYCHART.on("mousemove",function(data) {
@@ -104,8 +105,10 @@
 							left: data.relative.x + "%",
 							visibility:"visible"
 						});
-						var nearest = SERIES1.nearestPoint(data.value.x);
-						var relative = MYCHART.fromValuesToRelativePosition(nearest);
+
+						var valuesSeries = MYCHART.fromRelativePositionToValues(SERIES1,data.relative);
+						var nearest = SERIES1.nearestPoint(valuesSeries.x);
+						var relative = MYCHART.fromValuesToRelativePosition(SERIES1, nearest);
 						ptSeries1.style({
 							left: relative.x + "%",
 							top : relative.y + "%",
@@ -114,9 +117,10 @@
 							value: nearest,
 							relative: relative
 						});
-									
-						nearest = SERIES2.nearestPoint(data.value.x);
-						relative = MYCHART.fromValuesToRelativePosition(nearest);
+
+						valuesSeries = MYCHART.fromRelativePositionToValues(SERIES2,data.relative);
+						nearest = SERIES2.nearestPoint(valuesSeries.x);
+						relative = MYCHART.fromValuesToRelativePosition(SERIES2, nearest);
 						ptSeries2.style({
 							left: relative.x + "%",
 							top : relative.y + "%",
