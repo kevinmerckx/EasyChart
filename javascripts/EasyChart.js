@@ -72,6 +72,11 @@ EasyChart.prototype.fromValuesToRelativePosition = function(pt) {
 	return this._chartView.fromValuesToRelativePosition({x:pt.x,y:pt.y});
 };
 
+EasyChart.prototype.setXAxisScale = function(d3scale) {
+    this._chartView.xScale = d3scale;
+    return this;
+};
+
 makeObservable(EasyChart);
 
 EasyChart.prototype.makeAnnotation = function(name) {

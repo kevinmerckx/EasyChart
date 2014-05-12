@@ -11,13 +11,15 @@ var XAxisView = function (element) {
 };
 
 XAxisView.prototype.setScale = function (scale) {
+    var that = this;
 	var scaleTicks = scale.ticks();
 	var domain = scale.domain();
 	var a = 1000.0/(domain[1]-domain[0]);
 	var b = -a*domain[0];
 	
 	var ticks = this.svg.selectAll("line.tick").data(scaleTicks);
-	ticks.enter().append("line").classed({"tick":true});
+    ticks.exit().remove();
+    ticks.enter().append("line").classed({"tick":true});
 	ticks
 	.attr("x1",
 		  function(d) {
@@ -28,17 +30,17 @@ XAxisView.prototype.setScale = function (scale) {
 			  return a*d + b;
 	})
 	.attr("y1",0).attr("y2",100);
-	ticks.exit().remove();
 	
 	var a = 100.0/(domain[1]-domain[0]);
 	var b = -a*domain[0];
+    
 	var labels = this.root.selectAll("div.label").data(scaleTicks);
+	labels.exit().remove();
 	labels.enter().append("div").classed({"label":true});
 	labels.style("left",function(d){
 		return a*d+b + "%";
 	}).text(function(d,i){
-		return scaleTicks[i];
+        return scale.tickFormat()(scaleTicks[i]);
 	});
-	labels.exit().remove();
 	return this;
 };

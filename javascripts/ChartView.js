@@ -25,9 +25,7 @@ var ChartView = function(root) {
 	this._svg.classed({"chart":true})
 	.attr({
 		viewBox: this._viewbox.min_x + " " + this._viewbox.min_y + " " + this._viewbox.width + " " + this._viewbox.height,
-		preserveAspectRatio: "none",
-		width: this._viewbox.width,
-		height: this._viewbox.height
+		preserveAspectRatio: "none"
 	});
 		
 	this.xScale = d3.scale.linear();
@@ -140,13 +138,12 @@ ChartView.prototype._updateDomainAndRange = function() {
 
 	this.xScale
 	.domain([min_x,max_x])
-	.range([min_x,max_x])
-	.nice();
+	.range([min_x,max_x]);
 	
 	this.yScale
 	.domain([min_y,max_y])
-	.range([min_y,max_y])
-	.nice();
+	.range([min_y,max_y]);
+    
 };
 
 ChartView.prototype.update = function() {
